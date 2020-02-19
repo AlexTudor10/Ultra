@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="./syntaxhighlighter/scripts/shCore.js"></script>
+    <script type="text/javascript" src="./syntaxhighlighter/scripts/shBrushUltra.js"></script>
+    <link type="text/css" rel="stylesheet" href="./syntaxhighlighter/styles/shCoreDefault.css" />
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
+    <title>Ultra | The most powerful programming language on the planet</title>
+</head>
+
+<body>
+    <script src="configCompiler.js"></script>
+    <script src="lexer.js"></script>
+    <script src="parser.js"></script>
+    <script src="generator.js"></script>
+    <!-- TODO: CHECK PERMISSIONS OF USING brush: ... -->
+    <pre id="code" class="brush: ultra">
+        // this is a comment
+        data myNewIntVariable = 15.2
+        data OtherIntVariable = +24
+        data myName = "Alex"
+        print "I have "
+        print years
+        print " years. \n\n\n"
+        print 123
+        print " is a number. "
+        // to continue with:
+        // task Eat {
+        //    receives (whatToEat, howMuchTime)
+        //        print "Finished"
+        //    returns howMuchTime + 60 
+        // }
+    </pre>
+    <button>Validate</button>
+    <pre id="result">
+        # You will receive the result here
+    </pre>
+    <label for="alphabet">
+        Order variables alphabetically: <input type="checkbox" id="alphabet" />
+    </label>
+    <pre id="vars">
+        # Your variables will be here
+    </pre>
+    <script id="removeMe">
+        var tmp = window.setInterval(function() {
+            if (document.querySelector(".toolbar") && document.querySelector(".gutter")) {
+                document.querySelector(".toolbar").remove();
+                document.querySelector(".gutter").remove();
+                window.clearInterval(tmp);
+                tmp = undefined;
+                document.getElementById("removeMe").remove();
+            }
+        }, 1);
+    </script>
+    <script>
+        var goodStatus = true,
+            screenHasPlaceholder = true;
+
+
+        function addToPrompt(string) {
+            if (screenHasPlaceholder) {
+                document.querySelector("#result").innerHTML = "prompt:\n\n" + string;
+                screenHasPlaceholder = false;
+            } else document.querySelector("#result").innerHTML += string;
+        }
+
+        document.querySelector("button").addEventListener("click", function() {
+            // var win = window.open("", "Title", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=480,height=200,top=" + (screen.height - 400) + ",left=" + (screen.width - 840));
+            // win.document.body.innerHTML = "Ultra code result right here";
+            // win.document.title = "Ultra | Code terminal";
+
+            console.clear();
+            console.time("^$: Time Elapsed");
+            console.log("%c Ultra Compiler ", "background: orangered; color: yellow; font-size: x-large;border: 1px solid black; text-shadow: 2px 2px 4px #000000;");
+            console.log("%c+\n| FAST COMPILATION CHEATSHEET:\n| = Signal  ^$:  OK\n| = Signal ^$$: An Error Occured\n+", "color: blue")
+            console.log("%c+\n| THIS COMPILER ALLOWS THE FOLLOWING ACTIONS:\n| = Single Line Comments\n| = Variable Declarations \n| = Variable Changing By Redeclaration\n| = Print Action To Prompt\n| = String Save And Print\n| = Unicode Character Recognition And Use\n| = Variable Visualisation And Ordering \n+", "color:blue")
+            console.log("^$: Compiler Starting...")
+            var Compiler = new COMPILER(goodStatus);
+            var code, variables = {};
+            code = Compiler.Generate(Compiler.Parse(Compiler.Lex(document.querySelector("#code"))));
+            console.log("^$: Received Execution Signal, Preparing To Run...")
+            eval(code);
+            code = ""
+
+
+            document.querySelector("#vars").innerHTML = "variables:\n" + JSON.stringify(
+                document.querySelector("#alphabet").checked ? Object.entries(variables).sort().reduce((obj, [k, v]) => ({...obj,
+                    [k]: v
+                }), {}) : variables, null, '\t');
+            goodStatus = true;
+            screenHasPlaceholder = true;
+
+            var execTimeEnd = Date.now();
+            console.log("%c^$: Compilation Successful!", "color: green");
+            console.log("%c^$: Status: OK (No Errors)", "color: green")
+            console.log("^$: Compilation Ended At:\n^$:", new Date());
+            console.timeEnd("^$: Time Elapsed")
+        });
+    </script>
+</body>
+
+</html>
